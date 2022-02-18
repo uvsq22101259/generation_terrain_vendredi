@@ -6,6 +6,7 @@
 # import des librairies
 
 import tkinter as tk
+import random as rd
 
 
 ############################
@@ -15,21 +16,52 @@ import tkinter as tk
 HAUTEUR = 600
 # largeur du canevas
 LARGEUR = 600
+# taille de la grille
+N = 4
+
+# choix des couleurs
+COUL_MUR = "grey"
+COUL_VIDE = "white"
+
+# paramètres de l'automate
+# probabilité d'avoir un mur à l'initialisation
+P = 0.5
 
 
+######################
+# variables globales
 
+terrain = []
+grille = []
 
 #######################
 # fonctions
 
 def init_terrain():
     """ Initilise le terrain de la manière suivante:
-    * met à 0 la liste appelée terrain à 2D qui contient pour chaque case la 
+    * met à 0 la liste à 2D appelée terrain qui contient pour chaque case la 
     valeur 1 si il y a un mur, et 0 sinon
-    * initialise la liste grille à 2D qui contient l'identifiant
-    du carré dessiné sur le canevas pour chaque case 
+    * initialise la liste à 2D grille qui contient l'identifiant
+    de chaque carré dessiné sur le canevas 
     """
-    pass
+    global grille, terrain
+    for i in range(N):
+        terrain.append([0]*N)
+        grille.append([0]*N)
+
+    for i in range(N):
+        for j in range(N):
+            if rd.uniform(0, 1) < P:
+                terrain[i][j] = 1
+                couleur = COUL_MUR
+            else:
+                couleur = COUL_VIDE
+            largeur = LARGEUR // N
+            hauteur = HAUTEUR // N
+            x0, y0 = i * largeur, j * hauteur
+            x1, y1 = (i + 1) * largeur, (j + 1) * hauteur
+            canvas.create_rectangle((x0, y0), (x1, y1), fill=couleur)
+
 
 
 #######################
