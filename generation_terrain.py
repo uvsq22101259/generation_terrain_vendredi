@@ -45,6 +45,10 @@ def init_terrain():
     de chaque carré dessiné sur le canevas 
     """
     global grille, terrain
+    # on réinitialise les variables et le canvas
+    grille = []
+    terrain = []
+    canvas.delete()
     for i in range(N):
         terrain.append([0]*N)
         grille.append([0]*N)
@@ -60,12 +64,25 @@ def init_terrain():
             hauteur = HAUTEUR // N
             x0, y0 = i * largeur, j * hauteur
             x1, y1 = (i + 1) * largeur, (j + 1) * hauteur
-            canvas.create_rectangle((x0, y0), (x1, y1), fill=couleur)
+            rectangle = canvas.create_rectangle((x0, y0), (x1, y1), fill=couleur)
+            grille[i][j] = rectangle
 
+
+def affiche_terrain():
+    """ Affiche le terrain sur le canvas"""
+    for i in range(N):
+        for j in range(N):
+            if terrain[i][j] == 0:
+                coul = COUL_VIDE
+            else:
+                coul = COUL_MUR
+            canvas.itemconfigure(grille[i][j], fill=coul)
 
 
 def sauvegarde():
-    """ Ecrit la valeur N et la variable terrain dans le fichier sauvegarde.txt"""
+    """ Ecrit la valeur N et la variable terrain
+        dans le fichier sauvegarde.txt
+    """
     fic = open("sauvegarde.txt", "w")
     fic.write(str(N) + "\n")
     for i in range(N):
@@ -76,8 +93,25 @@ def sauvegarde():
 
 
 def load():
-    """blabla"""
-    pass
+    """Lit le fichier sauvegarde.txt et met à jour les variables
+     N et terrain en conséquence, et modifie l'affichage
+    """
+    global N
+    fic = open("sauvegarde.txt", "r")
+    ligne = fic.readline()
+    N = int(ligne)
+    init_terrain()
+    i = j = 0
+    for ligne in fic:
+        n = int(ligne)
+        terrain[i][j] = n
+        j += 1
+        if j == N:
+            j = 0
+            i += 1
+    fic.close()
+    affiche_terrain()
+
 
 
 #######################
